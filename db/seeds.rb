@@ -10,6 +10,7 @@ def rebuild
   Book.destroy_all
   Store.destroy_all
   User.destroy_all
+  Admin.destroy_all
 
   1...3.times do |i|
     User.create!(
@@ -34,6 +35,11 @@ def rebuild
       publication_date: '2021-01-01'.to_date + rand(60).days,
       user_id: user_ids.sample,
       store_id: store_ids.sample)
+  end
+
+  1.times do |i|
+    Admin.create(
+      email: 'admin@email.com')
   end
 
 end
