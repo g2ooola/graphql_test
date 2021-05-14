@@ -7,6 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 def rebuild
+  StoresBook.destroy_all
   Book.destroy_all
   Store.destroy_all
   User.destroy_all
@@ -22,7 +23,8 @@ def rebuild
 
   1...5.times do |i|
     Store.create!(
-      name: "store#{i}"
+      name: "store#{i}",
+      grade: [:general, :good, :best].sample
     )
   end
 
@@ -40,6 +42,12 @@ def rebuild
   1.times do |i|
     Admin.create(
       email: 'admin@email.com')
+  end
+
+  Book.all.each do |book|
+    rand(0..2).times do
+      book.stores_books.create!(store_id: Store.all.sample.id)
+    end
   end
 
 end
