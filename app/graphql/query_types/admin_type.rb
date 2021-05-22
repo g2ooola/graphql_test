@@ -1,27 +1,11 @@
 module QueryTypes
   class AdminType < Types::BaseObject
     field :id, ID, null: false
-    field :email, String, null: false, validates: { format: { with: /\w+@\w+\.\w+/ } }
-    field :search_books, [BookType], null: false do
-      argument :name, String, required: false, default_value: ''
-      argument :date, GraphQL::Types::ISO8601Date, required: false, deprecation_reason: "Use `publication_date` instead."
-      argument :publication_date, GraphQL::Types::ISO8601Date, required: false
-      argument :store_id, ID, required: false, prepare: ->(startDate, ctx) {
-        # return the prepared argument.
-        # raise a GraphQL::ExecutionError to halt the execution of the field and
-        # add the exception's message to the `errors` key.
-      }
-    end
 
-    def search_books(**args)
-      name = args[:name]
-      publication_date = args[:publication_date]
-      # publication_date = args[:date]
-
-      books = Book
-      books = books.where("name like ?", "%#{name}%") if name.present?
-      books = books.where(publication_date: publication_date) if publication_date.present?
-      books = books.limit(3)
-    end
+    # 若要回傳的 email 沒通過 validates，則這個 field 視為 nil
+    #   若此時 null: true,  則此 field 會回傳 nil
+    #   若此時 null: false, 因為兩者衝突導致整個 type 錯誤，整個 type 回傳 nil
+    # 以上兩個狀況都會有錯誤訊息
+    field :email, String, null: true #, validates: { format: { with: /\w+@\w+\.\w+/ } }
   end
 end

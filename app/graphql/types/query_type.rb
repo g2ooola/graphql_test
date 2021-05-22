@@ -7,15 +7,19 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    # field :user, UserType, null: true do
-    field :user, QueryTypes::UserType, null: true do 
-      description "Find a user by ID"
-      argument :id, ID, required: true
+    field :role_user, QueryTypes::Roles::UserRole, null: true do 
+      description "Auth current user"
+      argument :secret, String, required: false
     end
 
-    field :current_admin, QueryTypes::AdminType, null: true do
-      description "Find current admin"
-      argument :id, ID, required: true
+    # field :role_admin, QueryTypes::AdminType, null: true do
+    #   description "Find current admin"
+    #   argument :secret, String, required: false
+    # end
+
+    field :role_admin, QueryTypes::Roles::AdminRole, null: true do
+      description "Auth current admin"
+      argument :secret, String, required: false
     end
 
     # # TODO: remove me
@@ -25,12 +29,31 @@ module Types
     #   "Hello World!"
     # end
 
-    def user(id:)
-      User.find(id)
+    def role_user(secret:)
+      # User.find_by(secret: secret)
+      if !Rails.env.production? && secret.present?
+        context[:current_user] = User.find_by(secret: secret)
+      end
+
+      context[:current_user]
     end
 
-    def current_admin(id:)
-      Admin.find(id)
+    def role_admin(secret:)
+      # set_admin_in_development_env!(secret)
+      # current_admin
+
+      # current_admin = context[:current_admin]
+      # if !Rails.env.production? && secret.present?
+      #   current_admin = Admin.find_by(secret: secret)
+      # end
+
+      # current_admin
+
+      if !Rails.env.production? && secret.present?
+        context[:current_admin] = Admin.find_by(secret: secret)
+      end
+
+      context[:current_admin]
     end
   end
 end

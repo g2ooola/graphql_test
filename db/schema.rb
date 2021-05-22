@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_09_045438) do
+ActiveRecord::Schema.define(version: 2021_05_21_163613) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "secret"
   end
 
   create_table "books", force: :cascade do |t|
@@ -25,8 +26,26 @@ ActiveRecord::Schema.define(version: 2021_05_09_045438) do
     t.integer "store_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "publishing_house_id"
+    t.index ["publishing_house_id"], name: "index_books_on_publishing_house_id"
     t.index ["store_id"], name: "index_books_on_store_id"
     t.index ["user_id"], name: "index_books_on_user_id"
+  end
+
+  create_table "coupons", force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id"
+    t.integer "discount", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_coupons_on_user_id"
+  end
+
+  create_table "publishing_houses", force: :cascade do |t|
+    t.string "name"
+    t.string "tel"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "stores", force: :cascade do |t|
@@ -52,6 +71,8 @@ ActiveRecord::Schema.define(version: 2021_05_09_045438) do
     t.string "tel"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "level", default: 0
+    t.string "secret"
   end
 
 end

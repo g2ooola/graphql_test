@@ -6,13 +6,14 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-def rebuild
-  StoresBook.destroy_all
+def clear_db
+  Admin.destroy_all
   Book.destroy_all
   Store.destroy_all
   User.destroy_all
-  Admin.destroy_all
+end
 
+def create_data
   1...3.times do |i|
     User.create!(
       name: "user#{i}",
@@ -39,16 +40,32 @@ def rebuild
       store_id: store_ids.sample)
   end
 
+  User.all.each do |user|
+    Coupon.create!(
+      user: user,
+      name: "coupon-#{user.id}",
+      discount: rand(1..10))
+  end
+
   1.times do |i|
     Admin.create(
       email: 'admin@email.com')
   end
+end
 
-  Book.all.each do |book|
-    rand(0..2).times do
-      book.stores_books.create!(store_id: Store.all.sample.id)
-    end
-  end
+def fack_data
+  u = User.first
+  u.update(secret: '1234567890')
+
+  a = Admin.first
+  a.update(secret: '1234567890')
+end
+
+def rebuild
+  clear_db()
+  create_data()
+  fack_data()
+  
 
 end
 
