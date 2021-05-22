@@ -8,7 +8,9 @@
 
 def clear_db
   Admin.destroy_all
+  Coupon.destroy_all
   Book.destroy_all
+  PublishingHouse.destroy_all
   Store.destroy_all
   User.destroy_all
 end
@@ -29,15 +31,24 @@ def create_data
     )
   end
 
+  1..7.times do |i|
+    PublishingHouse.create!(
+      name: "Publsh #{i}",
+      tel: "09#{rand(100_000...999_999)}"
+    )
+  end
+
   user_ids = User.pluck(:id)
   store_ids = Store.pluck(:id)
+  publishing_ids = PublishingHouse.pluck(:id)
 
   1...15.times do |i|
     Book.create!(
       name: "book#{i}",
       publication_date: '2021-01-01'.to_date + rand(60).days,
       user_id: user_ids.sample,
-      store_id: store_ids.sample)
+      store_id: store_ids.sample,
+      publishing_house_id: publishing_ids.sample)
   end
 
   User.all.each do |user|
