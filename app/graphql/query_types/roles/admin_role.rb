@@ -13,6 +13,11 @@ module QueryTypes
           # add the exception's message to the `errors` key.
         }
       end
+      field :users, [UserType], null: true do
+        argument :name, String, required: false
+        argument :email, String, required: false
+        argument :tel, String, required: false
+      end
 
       def current_admin
         context[:current_admin]
@@ -26,6 +31,14 @@ module QueryTypes
         books = books.where("name like ?", "%#{name}%") if name.present?
         books = books.where(publication_date: publication_date) if publication_date.present?
         books = books.limit(3)
+      end
+
+      def users(**args)
+        users = User
+        users = users.where("name like ?", args[:name]) if args[:name].present?
+        users = users.where("email like ?", args[:email]) if args[:email].present?
+        users = users.where("tel like ?", args[:tel]) if args[:tel].present?
+        users = users.limit(3)
       end
 
     end

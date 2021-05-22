@@ -4,6 +4,7 @@ module QueryTypes
     field :name, String, null: true
     field :email, String, null: true
     field :tel, String, null: true
+    field :public, Boolean, null: true
     field :coupons, [CouponType], null: true
 
     field :level, Integer, null: true, description: "User Level" do
@@ -27,6 +28,11 @@ module QueryTypes
       books = books.where(publication_date: publication_date) if publication_date.present?
 
       books
+    end
+
+    def self.authorized?(object, context)
+      # super && (object.to_friend == context[:viewer] || object.from_friend == context[:viewer])
+      super && object.public || context[:current_user].id == object.id
     end
   end
 end

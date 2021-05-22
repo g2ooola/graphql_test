@@ -12,11 +12,6 @@ module Types
       argument :secret, String, required: false
     end
 
-    # field :role_admin, QueryTypes::AdminType, null: true do
-    #   description "Find current admin"
-    #   argument :secret, String, required: false
-    # end
-
     field :role_admin, QueryTypes::Roles::AdminRole, null: true do
       description "Auth current admin"
       argument :secret, String, required: false
@@ -30,7 +25,6 @@ module Types
     # end
 
     def role_user(secret:)
-      # User.find_by(secret: secret)
       if !Rails.env.production? && secret.present?
         context[:current_user] = User.find_by(secret: secret)
       end
@@ -39,16 +33,6 @@ module Types
     end
 
     def role_admin(secret:)
-      # set_admin_in_development_env!(secret)
-      # current_admin
-
-      # current_admin = context[:current_admin]
-      # if !Rails.env.production? && secret.present?
-      #   current_admin = Admin.find_by(secret: secret)
-      # end
-
-      # current_admin
-
       if !Rails.env.production? && secret.present?
         context[:current_admin] = Admin.find_by(secret: secret)
       end

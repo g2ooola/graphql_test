@@ -68,6 +68,9 @@ def fack_data
   u = User.first
   u.update(secret: '1234567890')
 
+  u2 = User.offset(1).first
+  u2.update(public: true)
+
   a = Admin.first
   a.update(secret: '1234567890')
 end
