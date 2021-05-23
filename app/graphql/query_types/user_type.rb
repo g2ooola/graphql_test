@@ -1,5 +1,6 @@
 module QueryTypes
   class UserType < Types::BaseObject
+
     field :id, ID, null: false
     field :name, String, null: true
     field :email, String, null: true
@@ -12,18 +13,17 @@ module QueryTypes
       # this visible method not working
     end
 
-    field :books, [BookType], null: false do
+    field :books, BookType.connection_type, null: false, max_page_size: 3 do
       argument :name, String, required: false, default_value: ''
       argument :publication_date, GraphQL::Types::ISO8601Date, required: false
-      argument :limit, Integer, required: false, default_value: 20, prepare: ->(limit, ctx) {[limit, 30].min}
       validates required: {
         one_of: [:name, :publication_date],
         message: 'May use either name or publication_date, but not both.'
       }
     end
 
-    def books(name: nil, publication_date: nil, limit:)
-      books = object.books.limit(limit)
+    def books(name: nil, publication_date: nil)
+      books = object.books
       books = books.where(name: name) if name.present?
       books = books.where(publication_date: publication_date) if publication_date.present?
 

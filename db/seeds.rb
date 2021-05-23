@@ -42,7 +42,7 @@ def create_data
   store_ids = Store.pluck(:id)
   publishing_ids = PublishingHouse.pluck(:id)
 
-  1...15.times do |i|
+  1...30.times do |i|
     Book.create!(
       name: "book#{i}",
       publication_date: '2021-01-01'.to_date + rand(60).days,
