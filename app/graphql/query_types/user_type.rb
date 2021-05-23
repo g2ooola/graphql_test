@@ -32,7 +32,11 @@ module QueryTypes
 
     def self.authorized?(object, context)
       # super && (object.to_friend == context[:viewer] || object.from_friend == context[:viewer])
-      super && object.public || context[:current_user].id == object.id
+      super && (
+        context[:current_admin].present? ||
+        object.public ||
+        context[:current_user].id == object.id
+      )
     end
   end
 end

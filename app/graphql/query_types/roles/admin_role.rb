@@ -17,6 +17,7 @@ module QueryTypes
         argument :name, String, required: false
         argument :email, String, required: false
         argument :tel, String, required: false
+        argument :limit, Integer, required: false, default_value: 3, prepare: ->(limit, ctx) {[limit, 5].min}
       end
 
       def current_admin
@@ -38,7 +39,7 @@ module QueryTypes
         users = users.where("name like ?", args[:name]) if args[:name].present?
         users = users.where("email like ?", args[:email]) if args[:email].present?
         users = users.where("tel like ?", args[:tel]) if args[:tel].present?
-        users = users.limit(3)
+        users = users.limit(args[:limit])
       end
 
     end
