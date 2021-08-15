@@ -3,7 +3,7 @@ module QueryTypes
 
     field :id, ID, null: false
     field :name, String, null: true
-    field :email, String, null: true
+    field :email, String, null: true, require_admin: true
     field :tel, String, null: true
     field :public, Boolean, null: true
     field :coupons, [CouponType], null: true
