@@ -1,24 +1,30 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+### mutation 語法範例
 
-* Ruby version
+一般的 query 欄位中填入以下範例，其中 SomeMutation 可以不填或甜任意值
+```graphql
+mutation SomeMutation($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    project {
+      name
+      id
+    }
+  }
+}
+```
 
-* System dependencies
+在下方的變數欄位中填入
 
-* Configuration
+```grqphql
+{
+  "input":{
+    "name":"product j",
+    "organizationId":1,
+    "workingMode":"ONLINE_ONLY"
+  }
+}
+```
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### 
